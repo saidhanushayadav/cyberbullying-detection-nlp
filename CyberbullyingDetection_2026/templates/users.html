@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Users - Cyberbullying Detection</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+	<div class="page-shell">
+		<header class="header-hero">
+			<h1 class="brand-title">User Account Monitoring</h1>
+			<p class="brand-subtitle">Manage account access based on behavior indicators and moderation policy.</p>
+			<nav class="menu">
+				<a class="active" href="#">Users</a>
+				<a href="/logout">Logout</a>
+			</nav>
+		</header>
+
+		<main class="main-grid single">
+			<section class="panel">
+				<h2>Admin Panel: {{ request.session.username }}</h2>
+				<p class="page-lead">Activate or deactivate users to maintain platform safety and responsible communication.</p>
+				<p class="helper-note">Suggestion: Review suspicious behavior counts before changing account status.</p>
+
+				<div class="responsive-table">
+					<table>
+						<thead>
+							<tr>
+								<th>User Name</th>
+								<th>Count</th>
+								<th>Status</th>
+								<th>Update Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in users %}
+								<tr>
+									<td>{{ user.username }}</td>
+									<td>{{ user.count }}</td>
+									<td>{{ user.status }}</td>
+									{% if user.status in "no" %}
+										<td><a href="/activateaccount?id={{ user.username }}&status=yes">Activate</a></td>
+									{% endif %}
+									{% if user.status in "yes" %}
+										<td><a href="/activateaccount?id={{ user.username }}&status=no">Deactivate</a></td>
+									{% endif %}
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+
+		<p class="footer-note">Clear moderation controls with mobile-friendly table layout.</p>
+	</div>
+</body>
+</html>

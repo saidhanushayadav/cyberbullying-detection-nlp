@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cyberbullying Detection</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+	<div class="page-shell">
+		<header class="header-hero">
+			<h1 class="brand-title">Cyberbullying and Harassment Detection Platform</h1>
+			<p class="brand-subtitle">Protecting women and children through safer social media interaction and early warning insights.</p>
+			<nav class="menu">
+				<a class="active" href="/login">Home</a>
+				<a href="/registration">Registration</a>
+			</nav>
+		</header>
+
+		<main class="main-grid single">
+			<section class="panel">
+				<h2>Sign In</h2>
+				<p class="page-lead">Use your account to access posting, friend management, and cyberbullying monitoring tools.</p>
+
+				<div class="status-msg {% if message %}warning{% else %}empty{% endif %}">
+					Login status: {{ message }}
+				</div>
+
+				<form name="form" action="/loginaction/">
+					{% csrf_token %}
+					<div class="form-grid">
+						<div class="field-full">
+							<label for="username">User Name</label>
+							<input id="username" type="text" name="username" value="" placeholder="Enter your user name">
+						</div>
+						<div class="field-full">
+							<label for="password">Password</label>
+							<input id="password" type="password" name="password" value="" placeholder="Enter your password">
+						</div>
+						<div class="field-full">
+							<button class="btn" type="submit" name="contact_submitted">Login</button>
+						</div>
+					</div>
+				</form>
+
+				<div class="feature-list">
+					<article class="feature-item">
+						<h4>Why this project matters</h4>
+						<p>This system helps detect harmful behavior quickly so communities can respond early and reduce online abuse.</p>
+					</article>
+					<article class="feature-item">
+						<h4>What you can do after login</h4>
+						<p>Create posts, engage with comments, find friends, and review sentiment indicators that can signal risky interactions.</p>
+					</article>
+				</div>
+
+				<p class="helper-note">Suggestion: If you are new, create an account first using the Registration page.</p>
+			</section>
+		</main>
+
+		<p class="footer-note">Designed for simple navigation, clarity, and mobile access.</p>
+	</div>
+</body>
+</html>

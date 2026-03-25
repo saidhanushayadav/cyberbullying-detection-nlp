@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Profile - Cyberbullying Detection</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+	<div class="page-shell">
+		<header class="header-hero">
+			<h1 class="brand-title">Your Profile Settings</h1>
+			<p class="brand-subtitle">Keep your profile accurate for trusted communication and easier friend identification.</p>
+			<nav class="menu">
+				<a href="/getposts">Posts</a>
+				<a href="/viewfriends">Friends</a>
+				<a class="active" href="/viewprofile">Profile</a>
+				<a href="/logout">Logout</a>
+			</nav>
+		</header>
+
+		<main class="main-grid">
+			<aside class="sidebar-stack">
+				<section class="panel profile-card">
+					<h3>Profile Picture</h3>
+					<img src="{% static '' %}{{ profile.pic }}" alt="{{ request.session.username }} profile picture">
+					<form method="post" action="/updatepic/" enctype="multipart/form-data">
+						{% csrf_token %}
+						<label for="pic">Upload New Picture</label>
+						<input id="pic" type="file" name="pic" value="">
+						<button class="btn" style="margin-top: 10px;" type="submit">Change Picture</button>
+					</form>
+				</section>
+
+				<section class="panel">
+					<h3>Quick Suggestion</h3>
+					<p class="page-lead">Use current contact details so trusted users and moderators can reach you when required.</p>
+					<p class="helper-note">Suggestion: Update password regularly and never share credentials in comments or posts.</p>
+				</section>
+			</aside>
+
+			<section class="panel">
+				<h2>Update Profile</h2>
+				<div class="status-msg {% if message %}success{% else %}empty{% endif %}">Update profile: {{ message }}</div>
+
+				<form name="form" action="/updateprofile/" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="utype" value="student">
+
+					<div class="form-grid">
+						<div>
+							<label for="name">Name</label>
+							<input id="name" type="text" name="name" value="{{ profile.name }}">
+						</div>
+						<div>
+							<label for="password">Password</label>
+							<input id="password" type="password" name="password" value="{{ profile.password }}">
+						</div>
+						<div>
+							<label for="email">Email</label>
+							<input id="email" type="text" name="email" value="{{ profile.email }}">
+						</div>
+						<div>
+							<label for="mobile">Mobile</label>
+							<input id="mobile" type="text" name="mobile" value="{{ profile.mobile }}">
+						</div>
+						<div class="field-full">
+							<label for="address">Address</label>
+							<textarea id="address" name="address">{{ profile.address }}</textarea>
+						</div>
+						<div class="field-full">
+							<button class="btn" type="submit" name="contact_submitted">Update Profile</button>
+						</div>
+					</div>
+				</form>
+			</section>
+		</main>
+
+		<p class="footer-note">Simple, guided profile management across devices.</p>
+	</div>
+</body>
+</html>

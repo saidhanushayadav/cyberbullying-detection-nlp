@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends - Cyberbullying Detection</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="header-hero">
+            <h1 class="brand-title">Friends and Connection Requests</h1>
+            <p class="brand-subtitle">Build supportive circles and respond safely to incoming requests.</p>
+            <nav class="menu">
+                <a href="/getposts">Posts</a>
+                <a class="active" href="/viewfriends">Friends</a>
+                <a href="/viewprofile">Profile</a>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+
+        <main class="main-grid single">
+            <section class="panel">
+                <h2>Hello, {{ request.session.username }}</h2>
+                <p class="page-lead">Review users, pending requests, and current friends from one simple table.</p>
+                <p class="helper-note">Suggestion: Accept requests only from known or verified profiles.</p>
+
+                <div class="responsive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Address</th>
+                                <th>Photo</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in results %}
+                                <tr>
+                                    <td>{{ result.name }}</td>
+                                    <td>{{ result.email }}</td>
+                                    <td>{{ result.mobile }}</td>
+                                    <td>{{ result.address }}</td>
+                                    <td><img class="avatar-sm" src="{% static '' %}{{ result.pic }}" alt="{{ result.username }}"></td>
+                                    <td><a href="/sendfriendrequest?friendname={{ result.username }}">Send request</a></td>
+                                </tr>
+                            {% endfor %}
+
+                            {% for frequest in requests %}
+                                <tr>
+                                    <td>{{ frequest.name }}</td>
+                                    <td>{{ frequest.email }}</td>
+                                    <td>{{ frequest.mobile }}</td>
+                                    <td>{{ frequest.address }}</td>
+                                    <td><img class="avatar-sm" src="{% static '' %}{{ frequest.pic }}" alt="{{ frequest.username }}"></td>
+                                    <td><a href="/acceptfriendrequest?friendname={{ frequest.username }}">Accept request</a></td>
+                                </tr>
+                            {% endfor %}
+
+                            {% for friend in friends %}
+                                <tr>
+                                    <td>{{ friend.name }}</td>
+                                    <td>{{ friend.email }}</td>
+                                    <td>{{ friend.mobile }}</td>
+                                    <td>{{ friend.address }}</td>
+                                    <td><img class="avatar-sm" src="{% static '' %}{{ friend.pic }}" alt="{{ friend.username }}"></td>
+                                    <td><a href="/unfriend?friendname={{ friend.username }}">Unfriend</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <p class="footer-note">Easy-to-read table view for quick relationship management.</p>
+    </div>
+</body>
+</html>
