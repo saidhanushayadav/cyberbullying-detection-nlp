@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registration - Cyberbullying Detection</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+	<div class="page-shell">
+		<header class="header-hero">
+			<h1 class="brand-title">Create Your Account</h1>
+			<p class="brand-subtitle">Join the platform to report, monitor, and reduce cyberbullying incidents responsibly.</p>
+			<nav class="menu">
+				<a href="/login">Home</a>
+				<a class="active" href="/registration">Registration</a>
+			</nav>
+		</header>
+
+		<main class="main-grid single">
+			<section class="panel">
+				<h2>Registration Form</h2>
+				<p class="page-lead">Complete all details accurately so friends can identify you and your profile remains trustworthy.</p>
+
+				<div class="status-msg {% if message %}success{% else %}empty{% endif %}">
+					Registration status: {{ message }}
+				</div>
+
+				<form name="form" action="/regaction/" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="hidden" name="utype" value="student">
+					<div class="form-grid">
+						<div>
+							<label for="name">Name</label>
+							<input id="name" type="text" name="name" value="" placeholder="Enter your full name">
+						</div>
+						<div>
+							<label for="username">User Name</label>
+							<input id="username" type="text" name="username" value="" placeholder="Choose a unique user name">
+						</div>
+						<div>
+							<label for="password">Password</label>
+							<input id="password" type="password" name="password" value="" placeholder="Create a secure password">
+						</div>
+						<div>
+							<label for="email">Email</label>
+							<input id="email" type="email" name="email" value="" placeholder="Enter your email">
+						</div>
+						<div>
+							<label for="mobile">Mobile</label>
+							<input id="mobile" type="text" name="mobile" value="" placeholder="Enter your mobile number">
+						</div>
+						<div>
+							<label for="pic">Profile Picture</label>
+							<input id="pic" type="file" name="pic" value="">
+						</div>
+						<div class="field-full">
+							<label for="address">Address</label>
+							<textarea id="address" name="address" placeholder="Enter your address"></textarea>
+						</div>
+						<div class="field-full">
+							<button class="btn" type="submit" name="contact_submitted">Register</button>
+						</div>
+					</div>
+				</form>
+
+				<div class="feature-list">
+					<article class="feature-item">
+						<h4>Privacy-aware participation</h4>
+						<p>Your profile helps establish safer communication and trusted user identity.</p>
+					</article>
+					<article class="feature-item">
+						<h4>Community safety first</h4>
+						<p>Account registration enables moderation workflows and better incident traceability.</p>
+					</article>
+				</div>
+
+				<p class="helper-note">Suggestion: Use a strong password and upload a clear profile picture for easier friend verification.</p>
+			</section>
+		</main>
+
+		<p class="footer-note">Simple forms and guided messaging for easy onboarding.</p>
+	</div>
+</body>
+</html>

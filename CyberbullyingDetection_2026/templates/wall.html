@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wall - Cyberbullying Detection</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}" title="style">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="header-hero">
+      <h1 class="brand-title">Community Wall</h1>
+      <p class="brand-subtitle">Share responsibly, identify harmful behavior quickly, and support safer online conversations.</p>
+      <nav class="menu">
+        <a class="active" href="/getposts">Posts</a>
+        <a href="/viewfriends">Friends</a>
+        <a href="/viewprofile">Profile</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </header>
+
+    <main class="main-grid">
+      <section class="panel">
+        <h2>Welcome, {{ request.session.username }}</h2>
+        <p class="page-lead">Post updates with care. Use comments and reactions to build respectful, constructive discussions.</p>
+        <div class="status-msg {% if message %}warning{% else %}empty{% endif %}">{{ message }}</div>
+
+        <form name="form" action="/postaction/" enctype="multipart/form-data" method="post">
+          {% csrf_token %}
+          <input type="hidden" id="lat" name="lat">
+          <input type="hidden" id="long" name="long">
+
+          <div class="form-grid">
+            <div class="field-full">
+              <label for="title">Post Title</label>
+              <input id="title" type="text" name="title" placeholder="What do you want to share?">
+            </div>
+            <div class="field-full">
+              <label for="image">Upload Photo</label>
+              <input id="image" type="file" name="image">
+            </div>
+            <div class="field-full">
+              <button class="btn" type="submit" name="contact_submitted">Publish Post</button>
+            </div>
+          </div>
+        </form>
+
+        <p class="helper-note">Suggestion: Keep your post title meaningful and avoid aggressive or abusive language.</p>
+
+        {% for postbean in posts %}
+          <article class="feed-item">
+            <div class="feed-top">
+              <h3 class="feed-title">{{ postbean.post.username }}: {{ postbean.post.title }}</h3>
+              <div class="feed-actions">
+                {% if request.session.username in postbean.post.username %}
+                  <a href="/deletepost?post={{ postbean.post.id }}">Delete</a>
+                {% endif %}
+                <a href="/sharepost?postid={{ postbean.post.id }}">Share</a>
+              </div>
+            </div>
+
+            <img src="{% static '' %}{{ postbean.post.image }}" alt="Post image">
+
+            <div class="feed-actions">
+              <a href="/likedislike?likeOrDislike=1&post={{ postbean.post.id }}">Like</a>
+              <span>{{ postbean.likes }}</span>
+              <a href="/likedislike?likeOrDislike=0&post={{ postbean.post.id }}">Dislike</a>
+              <span>{{ postbean.dislikes }}</span>
+            </div>
+
+            <div class="feed-meta">
+              <span class="tag positive">Positive: {{ postbean.positive }}</span>
+              <span class="tag negative">Negative: {{ postbean.negative }}</span>
+              <span class="tag neutral">Neutral: {{ postbean.neutral }}</span>
+            </div>
+
+            <form name="form" action="/postcomment/" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="post" value="{{ postbean.post.id }}">
+              <div class="form-grid" style="margin-top: 12px;">
+                <div class="field-full">
+                  <label for="comment_{{ postbean.post.id }}">Write a Comment</label>
+                  <input id="comment_{{ postbean.post.id }}" type="text" name="comment" placeholder="Share your feedback constructively">
+                </div>
+                <div class="field-full">
+                  <button class="btn secondary" type="submit" name="contact_submitted">Post Comment</button>
+                </div>
+              </div>
+            </form>
+
+            <ul class="comment-list" style="margin-top: 10px;">
+              {% for comment in postbean.comments %}
+                <li>{{ comment.comment }} - {{ comment.username }} on {{ comment.datetime }}</li>
+              {% endfor %}
+            </ul>
+          </article>
+        {% endfor %}
+      </section>
+
+      <aside class="sidebar-stack">
+        <section class="panel">
+          <h3>Find Posts</h3>
+          <p class="page-lead">Search by keywords to quickly locate useful or concerning content.</p>
+          <form name="form" action="/search">
+            {% csrf_token %}
+            <div class="search-row">
+              <input class="search-input" type="text" name="query" placeholder="Search posts...">
+              <button class="btn" type="submit">Search</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h3>Find Friends</h3>
+          <p class="page-lead">Connect with trusted users to build positive social circles.</p>
+          <form name="form" action="/searchusers">
+            {% csrf_token %}
+            <div class="search-row">
+              <input class="search-input" type="text" name="keyword" placeholder="Search users...">
+              <button class="btn" type="submit">Find</button>
+            </div>
+          </form>
+
+          <ul class="user-list" style="margin-top: 12px;">
+            {% for result in results %}
+              <li>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <img class="avatar-sm" src="{% static '' %}{{ result.pic }}" alt="{{ result.username }}">
+                  <div>
+                    <strong>{{ result.username }}</strong><br>
+                    <a href="/sendfriendrequest?friendname={{ result.username }}">Send request</a>
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+
+          <p class="helper-note">Suggestion: Review profile names carefully before sending friend requests.</p>
+        </section>
+      </aside>
+    </main>
+
+    <p class="footer-note">Responsive feed layout for desktop and mobile users.</p>
+  </div>
+</body>
+</html>
